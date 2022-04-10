@@ -1,5 +1,5 @@
 import tkinter as tk
-from canvtest  import ShapeCanvas as sc
+from ShapeCanvas import ShapeCanvas as sc
 
 
 
