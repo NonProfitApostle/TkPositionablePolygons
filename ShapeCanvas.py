@@ -1,5 +1,5 @@
 from tkinter import Canvas, Spinbox
-from PositionalPolygons import *
+from PositionalPolygon import *
 
 
 class ShapeCanvas(Canvas):    
