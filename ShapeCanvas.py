@@ -1,7 +1,7 @@
 from tkinter import Canvas, Spinbox
 from PositionalPolygon import *
 
-
+#subclass of the canvas, ideally this will be phased out
 class ShapeCanvas(Canvas):    
 
     def __init__(self, master, *args, **kwargs):
@@ -12,21 +12,25 @@ class ShapeCanvas(Canvas):
         self.shape_id = None
         self.shape2_id = None
         self.rot = None
-
+        #click and drag bindings
         self.bind('<Button-1>', self.startpos)
         self.bind('<B1-Motion>', self.drag)
         self.bind('<ButtonRelease-1>', self.endpos)
+        
+        
+        #Polygon side selector
         self.create_text(60, 30, text='No. of Sides:')
         self.shapes =  Spinbox(self, from_=2, to=360, increment=1, width=5)
         self.widg = self.create_window(125, 30, height=25, width = 50, window = self.shapes)
         self.tag_lower(self.widg)
-
-
+    
+    
+    #delete the angle viewer
     def endpos(self, event):
         if self.shape2_id is not None:
             self.delete(self.shape2_id)
         
-
+    #on click+mouse movement
     def drag(self, event):
         #store the new mouse position
         self.buffer_point = Point(event.x, event.y)
@@ -58,7 +62,7 @@ class ShapeCanvas(Canvas):
         else:
             self.shape_id = draw_line(self.start_point, self.buffer_point, self, dash = (3,1), fill='red')
 
-
+    #mark the first click
     def startpos(self, event):
         self.start_point = Point(event.x, event.y)                
 
