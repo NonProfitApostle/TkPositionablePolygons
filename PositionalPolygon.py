@@ -34,30 +34,56 @@ class Point:
 
         return Point(_x, _y)
 
+    
 #generates a n_sided Regular Polygon in bbox area, stores initial center for later rotation
 class RegularPolygon:
 
     def __init__(self, n_sides, bbox, start):
+        
+        #initial click point
         self.center = start
+        
+        #number f sides on the polygon
         self.num_sides = int(n_sides)
+        
+        #length of each side of a regular polygon with n_sides and bbox area
         self.s_len = 2 * (bbox / 2) * sin(pi / self.num_sides)
+        
+        #apotem
         self.apo = self.s_len / (2 * tan(pi / self.num_sides))
+        
+        #stored point reference for later rotation
         self.points = [Point(self.center.x - self.s_len // 2, self.center.y - self.apo)]
+        
+        #find the x,y points of the polygon vertices
         self.make_points()
         self.lines = []
+        
+        #populate the point sequence for create_polygon
         self.make_lines()
 
-    #deletes and redraws the  polygon on supplied canvas
+        
+    #deletes and redraws the polygon on supplied tk.canvas
     def __call__(self, canvas, rad, **kwargs):
+        
         #call each Point object in the vertices to get the newly rotated points
         self.points = [p(rad, self.center) for p in self.points]
+        
         #delete the old lines
         self.lines = []
+        
+        #regenerate the line sequence with the new points
         self.make_lines()
+        
+        #clear the container of former shapes
         canvas.delete(self._id)
+        
+        #generate the new CanvasId
         self._id = canvas.create_polygon(*self.lines,**kwargs)
+        
         return self._id, self
 
+    
     def make_points(self):
         _angle = 2 * pi    / self.num_sides
         for pdx in range(self.num_sides):
